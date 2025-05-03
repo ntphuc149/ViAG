@@ -1,1 +1,1 @@
-# ViAG: Answer Generation for Vietnamese
+# ViAG: Answer Generation for Vietnamese utilizing Encoder-Decoder models 
