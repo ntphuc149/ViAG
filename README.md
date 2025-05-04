@@ -1,6 +1,6 @@
 # ViAG - Vietnamese Answer Generation
 
-ViAG (Vietnamese Answer Generation) is a project for fine-tuning encoder-decoder models on Vietnamese question-answering tasks. This project provides tools for training, evaluating, and deploying models that can generate answers to questions in Vietnamese.
+ViAG (Vietnamese Answer Generation) is a project that fine-tunes encoder-decoder models on Vietnamese question-answering tasks. This project provides tools for training, evaluating, and deploying models that can generate answers to questions in Vietnamese.
 
 ## Features
 
@@ -15,22 +15,22 @@ ViAG (Vietnamese Answer Generation) is a project for fine-tuning encoder-decoder
 
 ```markdown
 ViAG/
-├── configs/ # Configuration files
-├── datasets/ # Data files
-│ ├── train.csv
-│ ├── val.csv
-│ └── test.csv
-├── src/ # Source code
-│ ├── data/ # Data loading and preprocessing
-│ ├── models/ # Model configuration and training
-│ ├── evaluation/ # Evaluation metrics and utilities
-│ └── utils/ # Helper functions and constants
-├── scripts/ # Training and evaluation scripts
-├── models/ # Directory for saved models
-├── notebooks/ # Jupyter notebooks for exploration
-├── outputs/ # Training outputs and logs
-├── requirements.txt # Project dependencies
-└── README.md # Project documentation
+├── configs/              # Configuration files
+├── datasets/             # Data files
+│   ├── train.csv
+│   ├── val.csv
+│   └── test.csv
+├── src/                  # Source code
+│   ├── data/             # Data loading and preprocessing
+│   ├── models/           # Model configuration and training
+│   ├── evaluation/       # Evaluation metrics and utilities
+│   └── utils/            # Helper functions and constants
+├── scripts/              # Training and evaluation scripts
+├── models/               # Directory for saved models
+├── notebooks/            # Jupyter notebooks for exploration
+├── outputs/              # Training outputs and logs
+├── requirements.txt      # Project dependencies
+└── README.md             # Project documentation
 ```
 
 ## Installation
@@ -38,7 +38,7 @@ ViAG/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/ViAG.git
+git clone https://github.com/ntphuc149/ViAG.git
 cd ViAG
 ```
 
@@ -48,7 +48,7 @@ cd ViAG
 pip install -r requirements.txt
 ```
 
-3. Install Vietnamese SpaCy model:
+3. Install the Vietnamese SpaCy model:
 
 ```
 pip install https://gitlab.com/trungtv/vi_spacy/-/raw/master/packages/vi_core_news_lg-3.6.0/dist/vi_core_news_lg-3.6.0.tar.gz
