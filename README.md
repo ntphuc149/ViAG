@@ -146,7 +146,7 @@ python scripts/train.py --config configs/my_config.json
 
 The project uses the following metrics to evaluate answer quality:
 
-- `ROUGE-1`, `ROUGE-2`, `ROUGE-L`: Measures n-gram overlap between generated and reference answers
+- `ROUGE-1`, `ROUGE-2`, `ROUGE-L`, `ROUGE-L-SUM`: Measures n-gram overlap between generated and reference answers
 - `BLEU-1`, `BLEU-2`, `BLEU-3`, `BLEU-4`: Measures precision of n-grams in generated answers
 - `METEOR`: Measures unigram alignment between generated and reference answers
 - `BERTScore`: Measures semantic similarity using BERT embeddings
