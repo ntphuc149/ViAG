@@ -199,25 +199,45 @@ class Evaluator:
             # Default to CSV
             df.to_csv(f"{output_file}.csv", index=False, encoding='utf-8-sig')
     
-    def compute_metrics(self, predictions: List[str], 
-                       references: List[str]) -> Dict[str, float]:
-        """Compute metrics for predictions.
+    # def compute_metrics(self, predictions: List[str], 
+    #                    references: List[str]) -> Dict[str, float]:
+    #     """Compute metrics for predictions.
         
-        Args:
-            predictions (List[str]): Predicted texts.
-            references (List[str]): Reference texts.
+    #     Args:
+    #         predictions (List[str]): Predicted texts.
+    #         references (List[str]): Reference texts.
             
-        Returns:
-            Dict[str, float]: Metrics.
-        """
+    #     Returns:
+    #         Dict[str, float]: Metrics.
+    #     """
+    #     if self.metrics_fn is None:
+    #         logger.warning("No metrics function provided. Cannot compute metrics.")
+    #         return {}
+        
+    #     metrics = self.metrics_fn(predictions, references)
+    #     logger.info(f"Metrics: {metrics}")
+        
+    #     return metrics
+
+    def compute_metrics(self, predictions: List[str], 
+                    references: List[str]) -> Dict[str, float]:
+        """Compute metrics for predictions."""
         if self.metrics_fn is None:
-            logger.warning("No metrics function provided. Cannot compute metrics.")
-            return {}
-        
-        metrics = self.metrics_fn(predictions, references)
-        logger.info(f"Metrics: {metrics}")
-        
-        return metrics
+            # Thay vì sử dụng metrics_fn, sử dụng các hàm trong metrics.py
+            from src.evaluation.metrics import calculate_metrics, calculate_bleu
+            
+            # Tính toán các loại metrics
+            bleu_scores = calculate_bleu(predictions, references)
+            other_metrics = calculate_metrics(predictions, references)
+            
+            # Kết hợp kết quả
+            metrics = {**bleu_scores, **other_metrics}
+            logger.info(f"Metrics: {metrics}")
+            return metrics
+        else:
+            metrics = self.metrics_fn(predictions, references)
+            logger.info(f"Metrics: {metrics}")
+            return metrics
     
     def save_metrics(self, metrics: Dict[str, float], 
                     output_file: str):
