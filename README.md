@@ -157,8 +157,8 @@ The project currently supports the following models:
 
 - `VietAI/vit5-base`
 - `VietAI/vit5-large`
-- `vinai/phobert-base`
-- `vinai/phobert-large`
+- `vinai/bartpho-syllable`
+- `vinai/bartpho-syllable-base`
 - Other encoder-decoder models compatible with the Hugging Face Transformers library
 
 ## License
