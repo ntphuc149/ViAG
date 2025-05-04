@@ -1,0 +1,26 @@
+{
+  "model": {
+    "name": "VietAI/vit5-base",
+    "max_input_length": 1024,
+    "max_target_length": 256
+  },
+  "training": {
+    "num_epochs": 5,
+    "learning_rate": 3e-5,
+    "batch_size": 2,
+    "gradient_accumulation_steps": 16,
+    "warmup_ratio": 0.05,
+    "weight_decay": 0.01,
+    "save_strategy": "steps",
+    "save_total_limit": 1
+  },
+  "data": {
+    "train_path": "datasets/train.csv",
+    "val_path": "datasets/val.csv",
+    "test_path": "datasets/test.csv"
+  },
+  "evaluation": {
+    "metrics": ["rouge", "bleu", "meteor", "bertscore"]
+  },
+  "output_dir": "outputs"
+}
