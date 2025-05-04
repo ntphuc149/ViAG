@@ -42,61 +42,115 @@ class Evaluator:
         logger.info(f"Evaluation metrics: {metrics}")
         return metrics
     
-    def predict(self, dataset: Dataset, 
-               output_file: Optional[str] = None,
-               max_length: int = 256,
-               num_beams: int = 4) -> List[str]:
-        """Generate predictions for a dataset.
+    # def predict(self, dataset: Dataset, 
+    #            output_file: Optional[str] = None,
+    #            max_length: int = 256,
+    #            num_beams: int = 4) -> List[str]:
+    #     """Generate predictions for a dataset.
         
-        Args:
-            dataset (Dataset): The dataset to generate predictions for.
-            output_file (str, optional): Path to save predictions. Defaults to None.
-            max_length (int, optional): Maximum length of predictions. Defaults to 256.
-            num_beams (int, optional): Number of beams for beam search. Defaults to 4.
+    #     Args:
+    #         dataset (Dataset): The dataset to generate predictions for.
+    #         output_file (str, optional): Path to save predictions. Defaults to None.
+    #         max_length (int, optional): Maximum length of predictions. Defaults to 256.
+    #         num_beams (int, optional): Number of beams for beam search. Defaults to 4.
             
-        Returns:
-            List[str]: Generated predictions.
-        """
+    #     Returns:
+    #         List[str]: Generated predictions.
+    #     """
+    #     logger.info("Generating predictions")
+        
+    #     # Generate predictions
+    #     preds = self.trainer.predict(
+    #         test_dataset=dataset,
+    #         max_length=max_length,
+    #         num_beams=num_beams
+    #     )
+        
+    #     # Decode predictions
+    #     decoded_preds = self.tokenizer.batch_decode(
+    #         preds.predictions, 
+    #         skip_special_tokens=True, 
+    #         clean_up_tokenization_spaces=True
+    #     )
+        
+    #     # Get references
+    #     labels = preds.label_ids
+    #     labels = labels.reshape(labels.shape[0], -1)
+        
+    #     # Replace -100 with pad token id
+    #     labels = labels.copy()
+    #     labels[labels == -100] = self.tokenizer.pad_token_id
+        
+    #     # Decode references
+    #     decoded_refs = self.tokenizer.batch_decode(
+    #         labels, 
+    #         skip_special_tokens=True, 
+    #         clean_up_tokenization_spaces=True
+    #     )
+        
+    #     # Format text
+    #     decoded_preds = [self.format_text(pred) for pred in decoded_preds]
+    #     decoded_refs = [self.format_text(ref) for ref in decoded_refs]
+        
+    #     # Save predictions if output file is provided
+    #     if output_file:
+    #         self.save_predictions(decoded_preds, decoded_refs, output_file)
+        
+    #     return decoded_preds, decoded_refs
+
+    def predict(self, dataset: Dataset, 
+           output_file: Optional[str] = None,
+           max_length: int = 256,
+           num_beams: int = 4) -> List[str]:
+        """Generate predictions for a dataset."""
         logger.info("Generating predictions")
         
-        # Generate predictions
-        preds = self.trainer.predict(
-            test_dataset=dataset,
-            max_length=max_length,
-            num_beams=num_beams
+        # Sử dụng model trực tiếp thay vì qua trainer
+        model = self.trainer.model
+        model.eval()
+        device = model.device
+        
+        all_preds = []
+        all_refs = []
+        
+        dataloader = torch.utils.data.DataLoader(
+            dataset, 
+            batch_size=1,
+            shuffle=False
         )
         
-        # Decode predictions
-        decoded_preds = self.tokenizer.batch_decode(
-            preds.predictions, 
-            skip_special_tokens=True, 
-            clean_up_tokenization_spaces=True
-        )
-        
-        # Get references
-        labels = preds.label_ids
-        labels = labels.reshape(labels.shape[0], -1)
-        
-        # Replace -100 with pad token id
-        labels = labels.copy()
-        labels[labels == -100] = self.tokenizer.pad_token_id
-        
-        # Decode references
-        decoded_refs = self.tokenizer.batch_decode(
-            labels, 
-            skip_special_tokens=True, 
-            clean_up_tokenization_spaces=True
-        )
+        with torch.no_grad():
+            for batch in tqdm(dataloader):
+                # Move to device
+                batch = {k: v.to(device) for k, v in batch.items()}
+                
+                # Generate
+                generated_ids = model.generate(
+                    input_ids=batch["input_ids"],
+                    attention_mask=batch["attention_mask"],
+                    max_length=max_length,
+                    num_beams=num_beams
+                )
+                
+                # Decode predictions
+                pred = self.tokenizer.decode(generated_ids[0], skip_special_tokens=True)
+                all_preds.append(pred)
+                
+                # Decode references (handle -100)
+                labels = batch["labels"][0].cpu().numpy()
+                labels = np.where(labels != -100, labels, self.tokenizer.pad_token_id)
+                ref = self.tokenizer.decode(labels, skip_special_tokens=True)
+                all_refs.append(ref)
         
         # Format text
-        decoded_preds = [self.format_text(pred) for pred in decoded_preds]
-        decoded_refs = [self.format_text(ref) for ref in decoded_refs]
+        all_preds = [self.format_text(pred) for pred in all_preds]
+        all_refs = [self.format_text(ref) for ref in all_refs]
         
-        # Save predictions if output file is provided
+        # Save predictions
         if output_file:
-            self.save_predictions(decoded_preds, decoded_refs, output_file)
+            self.save_predictions(all_preds, all_refs, output_file)
         
-        return decoded_preds, decoded_refs
+        return all_preds, all_refs
     
     @staticmethod
     def format_text(text: str) -> str:
