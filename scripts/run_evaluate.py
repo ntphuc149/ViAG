@@ -212,10 +212,16 @@ def main():
     logger.info(f"Metrics saved to {metrics_file}")
     
     # Print metrics
-    logger.info("Evaluation metrics:")
-    for key, value in metrics.items():
-        logger.info(f"{key}: {value:.4f}")
+    # logger.info("Evaluation metrics:")
+    # for key, value in metrics.items():
+    #     logger.info(f"{key}: {value:.4f}")
     
+    # logger.info("Evaluation script completed successfully")
+    print("\n===== EVALUATION METRICS =====")
+    for key, value in metrics.items():
+        print(f"{key}: {value:.4f}")
+        logger.info(f"{key}: {value:.4f}")
+    print("==============================\n")
     logger.info("Evaluation script completed successfully")
 
 if __name__ == "__main__":
