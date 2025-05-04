@@ -102,7 +102,8 @@ Evaluate a trained model:
 python scripts/run_evaluate.py \
     --test_data datasets/test.csv \
     --model_path outputs/experiment1 \
-    --output_dir outputs/evaluation1
+    --output_dir outputs/evaluation1 \
+    --batch_size 1
 ```
 
 For more options, run:
