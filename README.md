@@ -99,7 +99,7 @@ python scripts/train.py --help
 Evaluate a trained model:
 
 ```bash
-python scripts/evaluate.py \
+python scripts/run_evaluate.py \
     --test_data datasets/test.csv \
     --model_path outputs/experiment1 \
     --output_dir outputs/evaluation1
@@ -108,7 +108,7 @@ python scripts/evaluate.py \
 For more options, run:
 
 ```bash
-python scripts/evaluate.py --help
+python scripts/run_evaluate.py --help
 ```
 
 ## Configuration
@@ -118,7 +118,7 @@ You can customize the training process using a JSON configuration file:
 ```json
 {
   "model": {
-    "name": "VietAI/vit5-base",
+    "name": "vinai/bartpho-syllable-base",
     "max_input_length": 1024,
     "max_target_length": 256
   },
