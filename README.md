@@ -1,6 +1,6 @@
 # ViAG - Vietnamese Answer Generation
 
-ViAG (Vietnamese Answer Generation) is a project for fine-tuning encoder-decoder models on Vietnamese question-answering tasks. This project provides tools for training, evaluating, and deploying models that can generate abstractive answers to questions in Vietnamese.
+ViAG (Vietnamese Answer Generation) is a project for fine-tuning encoder-decoder models on Vietnamese question-answering tasks. This project provides tools for training, evaluating, and deploying models that can generate answers to questions in Vietnamese.
 
 ## Features
 
@@ -65,9 +65,9 @@ WANDB_API_KEY=your_wandb_api_key
 
 The expected data format is a CSV file with the following columns:
 
-`context`: The context passage
-`question`: The question to be answered
-`abstractive_answer`: The target abstractive answer
+- `context`: The context passage
+- `question`: The question to be answered
+- `answer`: The target generative answer
 
 ## Usage
 
@@ -151,7 +151,8 @@ The project uses the following metrics to evaluate answer quality:
 - `METEOR`: Measures unigram alignment between generated and reference answers
 - `BERTScore`: Measures semantic similarity using BERT embeddings
 
-Models
+## Models
+
 The project currently supports the following models:
 
 - `VietAI/vit5-base`
@@ -160,5 +161,6 @@ The project currently supports the following models:
 - `vinai/phobert-large`
 - Other encoder-decoder models compatible with the Hugging Face Transformers library
 
-License
+## License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
