@@ -1,0 +1,48 @@
+{
+  "model": {
+    "name": "Qwen/Qwen2-0.5B",
+    "instruction_template": "chatml",
+    "system_prompt": "Bạn là chuyên gia về lĩnh vực pháp luật tại Việt Nam.",
+    "max_seq_length": 2048
+  },
+  "lora": {
+    "r": 16,
+    "alpha": 32,
+    "dropout": 0.05,
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj",
+      "gate_proj",
+      "up_proj",
+      "down_proj"
+    ]
+  },
+  "quantization": {
+    "load_in_4bit": true,
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true
+  },
+  "training": {
+    "num_epochs": 5,
+    "batch_size": 1,
+    "gradient_accumulation_steps": 16,
+    "learning_rate": 3e-5,
+    "warmup_steps": 10,
+    "save_steps": 100,
+    "eval_steps": 100,
+    "use_packing": true
+  },
+  "generation": {
+    "max_new_tokens": 512,
+    "temperature": 0.1,
+    "top_p": 0.75
+  },
+  "data": {
+    "train_ratio": 0.8,
+    "val_ratio": 0.1,
+    "test_ratio": 0.1
+  },
+  "output_dir": "outputs/llm"
+}
