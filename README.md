@@ -112,6 +112,145 @@ For more options, run:
 python scripts/run_evaluate.py --help
 ```
 
+```markdown
+## LLM Instruction Fine-tuning (New Feature)
+
+ViAG now supports instruction fine-tuning for Large Language Models (LLMs) using QLoRA technique. This allows you to fine-tune models like Qwen, Llama, and Mistral on Vietnamese QA tasks with limited GPU memory.
+
+### Features
+
+- **QLoRA Integration**: 4-bit quantization with LoRA for memory-efficient training
+- **Multiple Instruction Formats**: Support for ChatML, Alpaca, Vicuna, Llama, and custom templates
+- **Flexible Workflow**: Separate training, inference, and evaluation phases for long-running jobs
+- **Automatic Data Splitting**: Split single dataset into train/val/test with customizable ratios
+
+### Quick Start
+
+#### 1. Full Pipeline (Train + Infer + Eval)
+
+```bash
+python scripts/train_llm.py \
+    --do_train --do_infer --do_eval \
+    --data_path Truong-Phuc/ViBidLQA \
+    --model_name Qwen/Qwen2-0.5B \
+    --instruction_template chatml \
+    --output_dir outputs/qwen2-vibidlqa
+```
+
+#### 2. Separate Phases (for Kaggle/Colab sessions)
+
+**Phase 1: Training (~11 hours)**
+```bash
+python scripts/train_llm.py \
+    --do_train \
+    --data_path data/train.csv \
+    --model_name Qwen/Qwen2-0.5B \
+    --num_epochs 10 \
+    --output_dir outputs/qwen2-checkpoint
+```
+
+**Phase 2: Inference (~1 hour)**
+```bash
+python scripts/train_llm.py \
+    --do_infer \
+    --test_data data/test.csv \
+    --checkpoint_path outputs/qwen2-checkpoint \
+    --predictions_file outputs/predictions.csv
+```
+
+**Phase 3: Evaluation (~10 minutes)**
+```bash
+python scripts/train_llm.py \
+    --do_eval \
+    --predictions_file outputs/predictions.csv \
+    --metrics_file outputs/metrics.json
+```
+
+### Instruction Templates
+
+The framework supports multiple instruction formats:
+
+#### ChatML (default)
+```
+<|im_start|>system
+{system_prompt}<|im_end|>
+<|im_start|>user
+{context}
+{question}<|im_end|>
+<|im_start|>assistant
+{answer}<|im_end|>
+```
+
+#### Alpaca
+```
+Below is an instruction that describes a task...
+
+### Instruction:
+{question}
+
+### Input:
+{context}
+
+### Response:
+{answer}
+```
+
+#### Custom Template
+```bash
+python scripts/train_llm.py \
+    --instruction_template custom \
+    --custom_template "Context: {context}\nQuestion: {question}\nAnswer: {answer}"
+```
+
+### Configuration
+
+You can use a JSON configuration file:
+
+```bash
+python scripts/train_llm.py --config configs/llm_config.json
+```
+
+Example configuration:
+```json
+{
+  "model": {
+    "name": "Qwen/Qwen2-0.5B",
+    "instruction_template": "chatml"
+  },
+  "lora": {
+    "r": 16,
+    "alpha": 32,
+    "dropout": 0.05
+  },
+  "training": {
+    "num_epochs": 5,
+    "batch_size": 1,
+    "gradient_accumulation_steps": 16
+  }
+}
+```
+
+### Supported Models
+
+- Qwen/Qwen2 series (0.5B, 1.5B, 7B)
+- meta-llama/Llama-2 series
+- mistralai/Mistral series
+- Any other causal LM compatible with Transformers
+
+### Advanced Options
+
+```bash
+python scripts/train_llm.py --help
+```
+
+Key parameters:
+- `--train_ratio`, `--val_ratio`, `--test_ratio`: Data split ratios (default: 8:1:1)
+- `--lora_r`: LoRA rank (default: 16)
+- `--learning_rate`: Learning rate (default: 3e-5)
+- `--max_new_tokens`: Max tokens to generate (default: 512)
+- `--use_wandb`: Enable W&B logging
+```
+
 ## Configuration
 
 You can customize the training process using a JSON configuration file:
