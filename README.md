@@ -282,6 +282,7 @@ Example configuration:
 ### Supported Models
 
 - Qwen/Qwen2 series (0.5B, 1.5B, 7B)
+- SeaLLMs/SeaLLMs-v3 series (1.5B, 7B)
 - meta-llama/Llama-2 series
 - mistralai/Mistral series
 - Any other causal LM compatible with Transformers
