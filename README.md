@@ -112,6 +112,56 @@ For more options, run:
 python scripts/run_evaluate.py --help
 ```
 
+## Configuration
+
+You can customize the training process using a JSON configuration file:
+
+```json
+{
+  "model": {
+    "name": "vinai/bartpho-syllable-base",
+    "max_input_length": 1024,
+    "max_target_length": 256
+  },
+  "training": {
+    "num_epochs": 5,
+    "learning_rate": 3e-5,
+    "batch_size": 2,
+    "gradient_accumulation_steps": 16
+  },
+  "data": {
+    "train_path": "datasets/train.csv",
+    "val_path": "datasets/val.csv",
+    "test_path": "datasets/test.csv"
+  }
+}
+```
+
+Then use it with:
+
+```bash
+python scripts/train.py --config configs/my_config.json
+```
+
+## Metrics
+
+The project uses the following metrics to evaluate answer quality:
+
+- `ROUGE-1`, `ROUGE-2`, `ROUGE-L`, `ROUGE-L-SUM`: Measures n-gram overlap between generated and reference answers
+- `BLEU-1`, `BLEU-2`, `BLEU-3`, `BLEU-4`: Measures precision of n-grams in generated answers
+- `METEOR`: Measures unigram alignment between generated and reference answers
+- `BERTScore`: Measures semantic similarity using BERT embeddings
+
+## Models
+
+The project currently supports the following models:
+
+- `VietAI/vit5-base`
+- `VietAI/vit5-large`
+- `vinai/bartpho-syllable`
+- `vinai/bartpho-syllable-base`
+- Other encoder-decoder models compatible with the Hugging Face Transformers library
+
 ## LLM Instruction Fine-tuning (New Feature)
 
 ViAG now supports instruction fine-tuning for Large Language Models (LLMs) using QLoRA technique. This allows you to fine-tune models like Qwen, Llama, and Mistral on Vietnamese QA tasks with limited GPU memory.
@@ -249,56 +299,6 @@ Key parameters:
 - `--max_new_tokens`: Max tokens to generate (default: 512)
 - `--use_wandb`: Enable W&B logging
 ```
-
-## Configuration
-
-You can customize the training process using a JSON configuration file:
-
-```json
-{
-  "model": {
-    "name": "vinai/bartpho-syllable-base",
-    "max_input_length": 1024,
-    "max_target_length": 256
-  },
-  "training": {
-    "num_epochs": 5,
-    "learning_rate": 3e-5,
-    "batch_size": 2,
-    "gradient_accumulation_steps": 16
-  },
-  "data": {
-    "train_path": "datasets/train.csv",
-    "val_path": "datasets/val.csv",
-    "test_path": "datasets/test.csv"
-  }
-}
-```
-
-Then use it with:
-
-```bash
-python scripts/train.py --config configs/my_config.json
-```
-
-## Metrics
-
-The project uses the following metrics to evaluate answer quality:
-
-- `ROUGE-1`, `ROUGE-2`, `ROUGE-L`, `ROUGE-L-SUM`: Measures n-gram overlap between generated and reference answers
-- `BLEU-1`, `BLEU-2`, `BLEU-3`, `BLEU-4`: Measures precision of n-grams in generated answers
-- `METEOR`: Measures unigram alignment between generated and reference answers
-- `BERTScore`: Measures semantic similarity using BERT embeddings
-
-## Models
-
-The project currently supports the following models:
-
-- `VietAI/vit5-base`
-- `VietAI/vit5-large`
-- `vinai/bartpho-syllable`
-- `vinai/bartpho-syllable-base`
-- Other encoder-decoder models compatible with the Hugging Face Transformers library
 
 ## License
 
