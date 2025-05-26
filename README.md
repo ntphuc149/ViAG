@@ -112,7 +112,6 @@ For more options, run:
 python scripts/run_evaluate.py --help
 ```
 
-```markdown
 ## LLM Instruction Fine-tuning (New Feature)
 
 ViAG now supports instruction fine-tuning for Large Language Models (LLMs) using QLoRA technique. This allows you to fine-tune models like Qwen, Llama, and Mistral on Vietnamese QA tasks with limited GPU memory.
