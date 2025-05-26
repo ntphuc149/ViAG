@@ -298,7 +298,6 @@ Key parameters:
 - `--learning_rate`: Learning rate (default: 3e-5)
 - `--max_new_tokens`: Max tokens to generate (default: 512)
 - `--use_wandb`: Enable W&B logging
-```
 
 ## License
 
