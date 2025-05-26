@@ -9,9 +9,14 @@ rouge_score==0.1.2
 tqdm==4.66.1
 wandb==0.16.6
 accelerate==0.29.3
-huggingface_hub==0.20.2
+huggingface-hub==0.22.2
 spacy==3.6.1
 pyvi==0.1.1
 bert_score==0.3.13
 python-dotenv==1.0.0
-peft==0.8.2
+tqdm==4.66.4
+loguru==0.7.2
+fire==0.7.0
+trl==0.8.3
+peft==0.15.2
+bitsandbytes==0.42.0
